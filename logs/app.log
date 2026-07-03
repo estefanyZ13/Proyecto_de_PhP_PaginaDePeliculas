@@ -1,0 +1,7 @@
+[02-Jul-2026 06:22:14 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión in C:\xampp\htdocs\ProyectoFinal\config\database.php:12
+Stack trace:
+#0 C:\xampp\htdocs\ProyectoFinal\config\database.php(12): mysqli->__construct('localhost', 'root', Object(SensitiveParameterValue), 'proyectofinal')
+#1 C:\xampp\htdocs\ProyectoFinal\models\Movie.php(5): require_once('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\ProyectoFinal\views\usuario\home.php(8): require_once('C:\\xampp\\htdocs...')
+#3 {main}
+  thrown in C:\xampp\htdocs\ProyectoFinal\config\database.php on line 12

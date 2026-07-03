@@ -1,0 +1,26 @@
+<?php
+/**
+ * Header común del proyecto
+ */
+require_once __DIR__ . '/../../config/config.php';
+
+// Leer cookie de tema (oscuro por defecto)
+$theme = getCookieVal('theme', 'dark');
+$theme_class = ($theme === 'light') ? 'theme-light' : '';
+?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo isset($page_title) ? clean($page_title) . " | Proyecto Final" : "Proyecto Final - Plataforma de Streaming"; ?></title>
+    
+    <!-- Hojas de estilo -->
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/style.css">
+    
+    <!-- Inyectar BASE_URL para JS -->
+    <script>
+        window.BASE_URL = "<?php echo BASE_URL; ?>";
+    </script>
+</head>
+<body class="<?php echo $theme_class; ?>">
