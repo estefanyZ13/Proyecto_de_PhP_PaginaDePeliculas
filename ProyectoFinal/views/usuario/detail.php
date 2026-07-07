@@ -251,7 +251,7 @@ require_once __DIR__ . '/../includes/navbar.php';
             </div>
 
             <?php if (!empty($recommendations)): ?>
-                <div class="section-container" style="padding-top: 8px; padding-bottom: 48px;">
+                <div class="section-container" style="grid-column: 1 / -1; padding: 8px 0 48px;">
                     <h2 class="section-title">También te puede gustar</h2>
                     <div class="media-grid">
                         <?php foreach ($recommendations as $rec):
