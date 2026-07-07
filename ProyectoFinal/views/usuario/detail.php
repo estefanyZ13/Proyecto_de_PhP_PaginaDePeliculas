@@ -9,6 +9,7 @@ require_once __DIR__ . '/../../models/Movie.php';
 require_once __DIR__ . '/../../models/Series.php';
 require_once __DIR__ . '/../../models/Favorite.php';
 require_once __DIR__ . '/../../models/Genre.php';
+require_once __DIR__ . '/../../models/Preference.php';
 
 $user_id = $_SESSION['user_id'];
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
@@ -123,6 +124,13 @@ $avg_stars = count($reviews) > 0 ? round($total_stars / count($reviews), 1) : 0;
 
 // Comprobar si es favorito
 $is_fav = Favorite::isFavorite($user_id, $tipo === 'movie' ? $id : null, $tipo === 'series' ? $id : null);
+
+// Recomendaciones relacionadas con el contenido abierto y los gustos del usuario
+$recommendations = Preference::getRecommendations($user_id, 8, [
+    'tipo' => $tipo,
+    'id' => $id,
+    'genero_id' => $item['genero_id']
+]);
 
 $page_title = $item['titulo'];
 require_once __DIR__ . '/../includes/header.php';
@@ -241,6 +249,33 @@ require_once __DIR__ . '/../includes/navbar.php';
                     
                 </div>
             </div>
+
+            <?php if (!empty($recommendations)): ?>
+                <div class="section-container" style="padding-top: 8px; padding-bottom: 48px;">
+                    <h2 class="section-title">También te puede gustar</h2>
+                    <div class="media-grid">
+                        <?php foreach ($recommendations as $rec):
+                            $rec_tipo = $rec['tipo'];
+                            $rec_id = $rec['id'];
+                            $rec_img = mediaUrl($rec['imagen_url']);
+                        ?>
+                            <div class="media-card" onclick="location.href='<?php echo BASE_URL; ?>views/usuario/detail.php?id=<?php echo $rec_id; ?>&tipo=<?php echo $rec_tipo; ?>'">
+                                <img src="<?php echo $rec_img; ?>" alt="<?php echo clean($rec['titulo']); ?>" onerror="this.src='<?php echo BASE_URL; ?>assets/img/placeholder.svg'">
+                                <div class="media-card-overlay">
+                                    <div class="media-card-title"><?php echo clean($rec['titulo']); ?></div>
+                                    <div class="media-card-meta">
+                                        <span><?php echo (int)$rec['año']; ?></span>
+                                        <span><?php echo ($rec_tipo === 'movie') ? 'Película' : 'Serie'; ?></span>
+                                        <?php if (!empty($rec['genero_nombre'])): ?>
+                                            <span><?php echo clean($rec['genero_nombre']); ?></span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
             
         </div>
         

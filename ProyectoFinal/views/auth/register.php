@@ -51,6 +51,13 @@ require_once __DIR__ . '/../includes/navbar.php';
             <div class="form-group" style="margin-bottom: 12px;">
                 <label for="password">Contraseña</label>
                 <input type="password" name="password" id="password" class="form-control" placeholder="Mínimo 12 caracteres, mayúscula, minúscula, número y símbolo" required>
+                <ul id="password-requirements" class="password-requirements" aria-live="polite">
+                    <li data-rule="length">Mínimo 12 caracteres</li>
+                    <li data-rule="uppercase">Al menos una letra mayúscula</li>
+                    <li data-rule="lowercase">Al menos una letra minúscula</li>
+                    <li data-rule="number">Al menos un número</li>
+                    <li data-rule="symbol">Al menos un símbolo</li>
+                </ul>
             </div>
             
             <div class="form-group" style="margin-bottom: 24px;">
@@ -84,15 +91,66 @@ require_once __DIR__ . '/../includes/navbar.php';
     </div>
 </div>
 
+<style>
+.password-requirements {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.password-requirements li::before {
+    content: "•";
+    display: inline-block;
+    width: 18px;
+    color: #e50914;
+    font-weight: 700;
+}
+
+.password-requirements li.valid {
+    color: #46d369;
+}
+
+.password-requirements li.valid::before {
+    content: "✓";
+    color: #46d369;
+}
+</style>
+
 <!-- Validación básica en cliente -->
 <script>
+const passwordInput = document.getElementById('password');
+const requirementItems = document.querySelectorAll('#password-requirements li');
+const passwordRules = {
+    length: value => value.length >= 12,
+    uppercase: value => /[A-Z]/.test(value),
+    lowercase: value => /[a-z]/.test(value),
+    number: value => /\d/.test(value),
+    symbol: value => /[^A-Za-z0-9]/.test(value)
+};
+
+function updatePasswordRequirements() {
+    const password = passwordInput.value;
+
+    requirementItems.forEach(item => {
+        const rule = item.dataset.rule;
+        item.classList.toggle('valid', passwordRules[rule](password));
+    });
+}
+
+passwordInput.addEventListener('input', updatePasswordRequirements);
+updatePasswordRequirements();
+
 document.getElementById('register-form').addEventListener('submit', function(e) {
     const password = document.getElementById('password').value;
     const confirm = document.getElementById('confirm_password').value;
     
-    const strongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{12,}$/;
+    const isStrongPassword = Object.keys(passwordRules).every(rule => passwordRules[rule](password));
 
-    if (!strongPassword.test(password)) {
+    if (!isStrongPassword) {
         e.preventDefault();
         alert('La contraseña debe tener mínimo 12 caracteres e incluir mayúscula, minúscula, número y símbolo.');
         return;

@@ -22,7 +22,7 @@ require_once __DIR__ . '/../includes/navbar.php';
     <div class="section-container" style="padding-top: 40px;">
         <h1 class="detail-title" style="font-size: 32px; margin-bottom: 8px;">Recomendado Para Ti</h1>
         <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 30px; max-width: 600px;">
-            Nuestro sistema analiza tus géneros favoritos y tu historial de reproducción reciente para sugerirte contenidos populares que se ajusten a tus gustos.
+            Nuestro sistema analiza tus géneros favoritos, tu historial, lo que abres y lo que agregas a Mi Lista para sugerirte contenido que se ajuste mejor a tus gustos.
         </p>
         
         <?php if (!empty($recommendations)): ?>

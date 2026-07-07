@@ -45,7 +45,7 @@ require_once __DIR__ . '/../includes/navbar.php';
             <div class="admin-header">
                 <div>
                     <h1 class="detail-title" style="font-size: 28px; margin-bottom: 4px;">Panel de Control</h1>
-                    <p style="color: var(--text-muted); font-size: 13px;">Resumen operativo de Proyecto Final.</p>
+                    <p style="color: var(--text-muted); font-size: 13px;">Resumen operativo de PopCornTime.</p>
                 </div>
             </div>
             

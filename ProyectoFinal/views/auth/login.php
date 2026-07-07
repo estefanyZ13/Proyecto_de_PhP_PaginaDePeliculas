@@ -44,7 +44,7 @@ require_once __DIR__ . '/../includes/navbar.php';
             <?php csrfField(); ?>
             <div class="form-group">
                 <label for="username">Usuario o Correo Electrónico</label>
-                <input type="text" name="username" id="username" class="form-control" placeholder="Ej: admin o user@proyectofinal.com" value="<?php echo clean($remembered_user); ?>" required autofocus>
+                <input type="text" name="username" id="username" class="form-control" placeholder="Ej: admin o user@popcorntime.com" value="<?php echo clean($remembered_user); ?>" required autofocus>
             </div>
             
             <div class="form-group">
@@ -63,7 +63,7 @@ require_once __DIR__ . '/../includes/navbar.php';
         </form>
         
         <div class="auth-redirect">
-            ¿Nuevo en Proyecto Final? <a href="register.php">Regístrate ahora</a>.
+            ¿Nuevo en PopCornTime? <a href="register.php">Regístrate ahora</a>.
         </div>
     </div>
 </div>

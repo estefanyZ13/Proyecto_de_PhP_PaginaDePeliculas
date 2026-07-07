@@ -10,7 +10,7 @@ $theme_text = getCookieVal('theme', 'dark') === 'light' ? 'Tema Oscuro' : 'Tema 
 ?>
 <nav class="navbar">
     <a href="<?php echo BASE_URL; ?>" class="navbar-logo">
-        🍿 Proyecto<span>Final</span>
+        🍿 PopCorn<span>Time</span>
     </a>
     
     <?php if (isLoggedIn()): ?>
