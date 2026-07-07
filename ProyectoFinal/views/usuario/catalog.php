@@ -98,11 +98,11 @@ require_once __DIR__ . '/../includes/navbar.php';
                     $tipo = $item['tipo'];
                     $media_id = $item['id'];
                     $titulo = $item['titulo'];
-                    $img = BASE_URL . $item['imagen_url'];
+                    $img = mediaUrl($item['imagen_url']);
                     $año = $item['año'];
                 ?>
                     <div class="media-card" onclick="location.href='<?php echo BASE_URL; ?>views/usuario/detail.php?id=<?php echo $media_id; ?>&tipo=<?php echo $tipo; ?>'">
-                        <img src="<?php echo $img; ?>" alt="<?php echo clean($titulo); ?>" onerror="this.src='<?php echo BASE_URL; ?>assets/img/placeholder.jpg'">
+                        <img src="<?php echo $img; ?>" alt="<?php echo clean($titulo); ?>" onerror="this.src='<?php echo BASE_URL; ?>assets/img/placeholder.svg'">
                         <div class="media-card-overlay">
                             <div class="media-card-title"><?php echo clean($titulo); ?></div>
                             <div class="media-card-meta">

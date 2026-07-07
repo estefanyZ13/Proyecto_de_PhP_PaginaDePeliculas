@@ -13,7 +13,7 @@ $items = [
     'insideout2' => '#e65100',
     'coco' => '#006064',
     'lalaland' => '#880e4f',
-    'avatar2' => '#01579b',
+    'avatar2poster' => '#01579b',
     'interstellar' => '#33691e',
     'lionking' => '#bf360c',
     'limitless' => '#37474f',
@@ -32,7 +32,7 @@ $emojis = ['🎬','📺','🍿','⭐','🎭','🎪','🎨','🎯','🌟','🎥',
 $i = 0;
 
 foreach ($items as $name => $color) {
-    $file = $img_dir . '/' . $name . '.jpg';
+    $file = $img_dir . '/' . $name . '.svg';
     $emoji = $emojis[$i % count($emojis)];
     $label = strtoupper(substr($name, 0, 10));
     $svg = <<<SVG
@@ -50,7 +50,7 @@ foreach ($items as $name => $color) {
 </svg>
 SVG;
     file_put_contents($file, $svg);
-    echo "Created: $name.jpg\n";
+    echo "Created: $name.svg\n";
     $i++;
 }
 
@@ -58,7 +58,7 @@ SVG;
 $av_colors = ['#1a237e','#006064','#880e4f','#4a148c'];
 $av_labels = ['A1','A2','A3','A4'];
 for ($j = 1; $j <= 4; $j++) {
-    $file = $img_dir . '/avatar' . $j . '.png';
+    $file = $img_dir . '/avatar' . $j . '.svg';
     $color = $av_colors[$j-1];
     $label = $av_labels[$j-1];
     $svg = <<<SVG
@@ -70,7 +70,7 @@ for ($j = 1; $j <= 4; $j++) {
 </svg>
 SVG;
     file_put_contents($file, $svg);
-    echo "Created: avatar{$j}.png\n";
+    echo "Created: avatar{$j}.svg\n";
 }
 
 echo "\n✓ Todas las imágenes generadas correctamente.";

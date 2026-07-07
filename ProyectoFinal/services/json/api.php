@@ -39,6 +39,11 @@ switch ($action) {
             echo json_encode(['error' => 'Usuario no autenticado.'], JSON_UNESCAPED_UNICODE);
             exit;
         }
+        if (!verifyCsrfToken()) {
+            http_response_code(403);
+            echo json_encode(['error' => 'Solicitud no autorizada.'], JSON_UNESCAPED_UNICODE);
+            exit;
+        }
         
         $data = json_decode(file_get_contents("php://input"), true);
         $user_id = $_SESSION['user_id'];
@@ -67,6 +72,11 @@ switch ($action) {
         if (!isLoggedIn()) {
             http_response_code(401);
             echo json_encode(['error' => 'Usuario no autenticado.'], JSON_UNESCAPED_UNICODE);
+            exit;
+        }
+        if (!verifyCsrfToken()) {
+            http_response_code(403);
+            echo json_encode(['error' => 'Solicitud no autorizada.'], JSON_UNESCAPED_UNICODE);
             exit;
         }
 

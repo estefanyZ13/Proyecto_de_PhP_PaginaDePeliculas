@@ -54,7 +54,7 @@ if (!$featured) {
         'titulo' => 'The Mandalorian',
         'descripcion' => 'Un cazarrecompensas solitario viaja por los confines de la galaxia, lejos de la autoridad de la Nueva República.',
         'año' => 2019,
-        'imagen_url' => 'assets/img/mandalorian.jpg',
+        'imagen_url' => 'assets/img/mandalorian.svg',
         'video_url' => 'https://www.youtube.com/embed/aOC8E8z_ifw'
     ];
 } else {
@@ -82,12 +82,12 @@ function renderMediaCard($item) {
     $tipo = $item['tipo'] ?? (isset($item['temporadas']) ? 'series' : 'movie');
     $media_id = $item['id'];
     $titulo = $item['titulo'];
-    $img = BASE_URL . $item['imagen_url'];
+    $img = mediaUrl($item['imagen_url']);
     $año = $item['año'];
     $progreso = $item['progreso'] ?? null;
     ?>
     <div class="media-card" onclick="location.href='<?php echo BASE_URL; ?>views/usuario/detail.php?id=<?php echo $media_id; ?>&tipo=<?php echo $tipo; ?>'">
-        <img src="<?php echo $img; ?>" alt="<?php echo clean($titulo); ?>" onerror="this.src='<?php echo BASE_URL; ?>assets/img/placeholder.jpg'">
+        <img src="<?php echo $img; ?>" alt="<?php echo clean($titulo); ?>" onerror="this.src='<?php echo BASE_URL; ?>assets/img/placeholder.svg'">
         <div class="media-card-overlay">
             <div class="media-card-title"><?php echo clean($titulo); ?></div>
             <div class="media-card-meta">
@@ -110,7 +110,7 @@ function renderMediaCard($item) {
     <!-- ── FEATURED HERO BANNER ── -->
     <?php
     // Obtener imagen de fondo (backdrop) o usar la misma poster card
-    $hero_bg = BASE_URL . $featured['imagen_url'];
+    $hero_bg = mediaUrl($featured['imagen_url']);
     ?>
     <div class="hero-banner" style="background-image: url('<?php echo $hero_bg; ?>');">
         <div class="hero-info">

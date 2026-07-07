@@ -13,10 +13,6 @@ $genres = Genre::getAll();
 $error = null;
 $msg = clean($_GET['msg'] ?? '');
 
-if (isset($_GET['delete']) && (int)$_GET['delete'] > 0) {
-    SeriesController::handleDelete((int)$_GET['delete']);
-}
-
 $edit_serie = null;
 $edit_id = isset($_GET['edit']) ? (int)$_GET['edit'] : 0;
 if ($edit_id > 0) {
@@ -24,7 +20,11 @@ if ($edit_id > 0) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['add_serie'])) {
+    if (!verifyCsrfToken()) {
+        $error = 'La sesión expiró. Recargue la página e intente nuevamente.';
+    } elseif (isset($_POST['delete_serie'])) {
+        SeriesController::handleDelete((int)($_POST['serie_id'] ?? 0));
+    } elseif (isset($_POST['add_serie'])) {
         $result = SeriesController::handleCreate();
         if (isset($result['error'])) $error = $result['error'];
     } elseif (isset($_POST['edit_serie'])) {
@@ -49,6 +49,7 @@ require_once __DIR__ . '/../includes/navbar.php';
                 <li class="active"><a href="series.php">📺 Series (CRUD)</a></li>
                 <li><a href="genres.php">🏷️ Géneros</a></li>
                 <li><a href="users.php">👥 Usuarios</a></li>
+                <li><a href="tmdb_import.php">⬇ Importar TMDB</a></li>
                 <div class="dropdown-divider" style="margin: 10px 24px;"></div>
                 <li><a href="../usuario/home.php">🏠 Volver al Sitio</a></li>
             </ul>
@@ -72,6 +73,7 @@ require_once __DIR__ . '/../includes/navbar.php';
             <div class="admin-chart-box" style="margin-bottom: 30px;">
                 <h3 class="admin-chart-title"><?php echo $edit_serie ? 'Editar Serie' : 'Agregar Nueva Serie'; ?></h3>
                 <form action="" method="POST" enctype="multipart/form-data">
+                    <?php csrfField(); ?>
                     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
                         <div class="form-group">
                             <label>Título de la Serie *</label>
@@ -130,7 +132,7 @@ require_once __DIR__ . '/../includes/navbar.php';
                             <?php if (!empty($series)): ?>
                                 <?php foreach ($series as $s): ?>
                                     <tr>
-                                        <td><img src="<?php echo BASE_URL . $s['imagen_url']; ?>" alt="" onerror="this.src='<?php echo BASE_URL; ?>assets/img/placeholder.jpg'"></td>
+                                        <td><img src="<?php echo mediaUrl($s['imagen_url']); ?>" alt="" onerror="this.src='<?php echo BASE_URL; ?>assets/img/placeholder.svg'"></td>
                                         <td><strong><?php echo clean($s['titulo']); ?></strong></td>
                                         <td><span class="hero-badge" style="font-size:11px;"><?php echo clean($s['genero_nombre']); ?></span></td>
                                         <td><?php echo $s['temporadas']; ?> T / <?php echo $s['episodios']; ?> Ep</td>
@@ -138,7 +140,11 @@ require_once __DIR__ . '/../includes/navbar.php';
                                         <td>🔥 <?php echo $s['clicks']; ?></td>
                                         <td><div class="action-buttons">
                                             <a href="series.php?edit=<?php echo $s['id']; ?>" class="btn btn-edit btn-sm">✏️ Editar</a>
-                                            <a href="series.php?delete=<?php echo $s['id']; ?>" class="btn btn-delete btn-sm" onclick="return confirm('¿Eliminar esta serie?');">🗑️ Eliminar</a>
+                                            <form action="" method="POST" style="display:inline;" onsubmit="return confirm('¿Eliminar esta serie?');">
+                                                <?php csrfField(); ?>
+                                                <input type="hidden" name="serie_id" value="<?php echo $s['id']; ?>">
+                                                <button type="submit" name="delete_serie" class="btn btn-delete btn-sm">🗑️ Eliminar</button>
+                                            </form>
                                         </div></td>
                                     </tr>
                                 <?php endforeach; ?>

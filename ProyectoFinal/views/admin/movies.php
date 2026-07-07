@@ -16,11 +16,6 @@ $genres = Genre::getAll();
 $error = null;
 $msg = clean($_GET['msg'] ?? '');
 
-// Eliminar
-if (isset($_GET['delete']) && (int)$_GET['delete'] > 0) {
-    MovieController::handleDelete((int)$_GET['delete']);
-}
-
 // Agregar o Editar (si es POST)
 $edit_movie = null;
 $edit_id = isset($_GET['edit']) ? (int)$_GET['edit'] : 0;
@@ -29,7 +24,11 @@ if ($edit_id > 0) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['add_movie'])) {
+    if (!verifyCsrfToken()) {
+        $error = 'La sesión expiró. Recargue la página e intente nuevamente.';
+    } elseif (isset($_POST['delete_movie'])) {
+        MovieController::handleDelete((int)($_POST['movie_id'] ?? 0));
+    } elseif (isset($_POST['add_movie'])) {
         $result = MovieController::handleCreate();
         if (isset($result['error'])) $error = $result['error'];
     } elseif (isset($_POST['edit_movie'])) {
@@ -57,6 +56,7 @@ require_once __DIR__ . '/../includes/navbar.php';
                 <li><a href="series.php">📺 Series (CRUD)</a></li>
                 <li><a href="genres.php">🏷️ Géneros</a></li>
                 <li><a href="users.php">👥 Usuarios</a></li>
+                <li><a href="tmdb_import.php">⬇ Importar TMDB</a></li>
                 <div class="dropdown-divider" style="margin: 10px 24px;"></div>
                 <li><a href="../usuario/home.php">🏠 Volver al Sitio</a></li>
             </ul>
@@ -90,6 +90,7 @@ require_once __DIR__ . '/../includes/navbar.php';
                 <h3 class="admin-chart-title"><?php echo $edit_movie ? 'Editar Película' : 'Agregar Nueva Película'; ?></h3>
                 
                 <form action="" method="POST" enctype="multipart/form-data">
+                    <?php csrfField(); ?>
                     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
                         <div class="form-group">
                             <label for="titulo">Título de la Película *</label>
@@ -126,7 +127,7 @@ require_once __DIR__ . '/../includes/navbar.php';
                             <label for="imagen">Póster de la Película</label>
                             <input type="file" name="imagen" id="imagen" class="form-control" style="padding: 8px;">
                             <?php if ($edit_movie): ?>
-                                <span style="font-size:11px; color:var(--text-muted);">Póster actual: <a href="<?php echo BASE_URL . $edit_movie['imagen_url']; ?>" target="_blank">Ver archivo</a></span>
+                                <span style="font-size:11px; color:var(--text-muted);">Póster actual: <a href="<?php echo mediaUrl($edit_movie['imagen_url']); ?>" target="_blank">Ver archivo</a></span>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -169,7 +170,7 @@ require_once __DIR__ . '/../includes/navbar.php';
                                 <?php foreach ($movies as $m): ?>
                                     <tr>
                                         <td>
-                                            <img src="<?php echo BASE_URL . $m['imagen_url']; ?>" alt="<?php echo clean($m['titulo']); ?>" onerror="this.src='<?php echo BASE_URL; ?>assets/img/placeholder.jpg'">
+                                            <img src="<?php echo mediaUrl($m['imagen_url']); ?>" alt="<?php echo clean($m['titulo']); ?>" onerror="this.src='<?php echo BASE_URL; ?>assets/img/placeholder.svg'">
                                         </td>
                                         <td><strong><?php echo clean($m['titulo']); ?></strong></td>
                                         <td><span class="hero-badge" style="font-size: 11px;"><?php echo clean($m['genero_nombre']); ?></span></td>
@@ -179,7 +180,11 @@ require_once __DIR__ . '/../includes/navbar.php';
                                         <td>
                                             <div class="action-buttons">
                                                 <a href="movies.php?edit=<?php echo $m['id']; ?>" class="btn btn-edit btn-sm">✏️ Editar</a>
-                                                <a href="movies.php?delete=<?php echo $m['id']; ?>" class="btn btn-delete btn-sm" onclick="return confirm('¿Estás seguro de eliminar esta película?');">🗑️ Eliminar</a>
+                                                <form action="" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de eliminar esta película?');">
+                                                    <?php csrfField(); ?>
+                                                    <input type="hidden" name="movie_id" value="<?php echo $m['id']; ?>">
+                                                    <button type="submit" name="delete_movie" class="btn btn-delete btn-sm">🗑️ Eliminar</button>
+                                                </form>
                                             </div>
                                         </td>
                                     </tr>

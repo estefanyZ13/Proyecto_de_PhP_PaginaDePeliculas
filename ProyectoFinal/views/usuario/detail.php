@@ -41,6 +41,9 @@ if (!$item) {
 // 2. Procesar nueva calificación / reseña (Seguridad: Prepared statements y sanitización)
 $msg = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_rating'])) {
+    if (!verifyCsrfToken()) {
+        $msg = ['error' => 'La sesión expiró. Recargue la página e intente nuevamente.'];
+    } else {
     $stars = isset($_POST['rating']) ? (int)$_POST['rating'] : 0;
     $comentario = clean($_POST['comentario'] ?? '');
     
@@ -82,6 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_rating'])) {
             $msg = ['error' => 'Error al guardar la calificación.'];
         }
         $stmt->close();
+    }
     }
 }
 
@@ -129,13 +133,13 @@ require_once __DIR__ . '/../includes/navbar.php';
     <div class="detail-wrapper">
         
         <!-- Backdrop Banner -->
-        <div class="detail-backdrop" style="background-image: url('<?php echo BASE_URL . $item['imagen_url']; ?>');"></div>
+        <div class="detail-backdrop" style="background-image: url('<?php echo mediaUrl($item['imagen_url']); ?>');"></div>
         
         <div class="detail-container">
             
             <!-- Poster -->
             <div class="detail-poster">
-                <img src="<?php echo BASE_URL . $item['imagen_url']; ?>" alt="<?php echo clean($item['titulo']); ?>" onerror="this.src='<?php echo BASE_URL; ?>assets/img/placeholder.jpg'">
+                <img src="<?php echo mediaUrl($item['imagen_url']); ?>" alt="<?php echo clean($item['titulo']); ?>" onerror="this.src='<?php echo BASE_URL; ?>assets/img/placeholder.svg'">
             </div>
             
             <!-- Info -->
@@ -194,6 +198,7 @@ require_once __DIR__ . '/../includes/navbar.php';
                     <div class="admin-chart-box" style="height: fit-content;">
                         <h3 style="font-size: 15px; margin-bottom: 16px;">Escribe tu valoración</h3>
                         <form action="" method="POST">
+                            <?php csrfField(); ?>
                             <div class="form-group">
                                 <label>Puntuación</label>
                                 <div class="star-rating">

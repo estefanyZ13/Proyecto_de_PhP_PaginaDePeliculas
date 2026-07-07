@@ -72,7 +72,7 @@ class Series {
             INSERT INTO series (titulo, descripcion, temporadas, episodios, año, imagen_url, video_url, genero_id) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ");
-        $stmt->bind_param("ssiiisss", $titulo, $descripcion, $temporadas, $episodios, $año, $imagen_url, $video_url, $genero_id);
+        $stmt->bind_param("ssiiissi", $titulo, $descripcion, $temporadas, $episodios, $año, $imagen_url, $video_url, $genero_id);
         $success = $stmt->execute();
         $insert_id = $conn->insert_id;
         $stmt->close();
@@ -86,7 +86,7 @@ class Series {
             SET titulo = ?, descripcion = ?, temporadas = ?, episodios = ?, año = ?, imagen_url = ?, video_url = ?, genero_id = ? 
             WHERE id = ?
         ");
-        $stmt->bind_param("ssiiisssi", $titulo, $descripcion, $temporadas, $episodios, $año, $imagen_url, $video_url, $genero_id, $id);
+        $stmt->bind_param("ssiiissii", $titulo, $descripcion, $temporadas, $episodios, $año, $imagen_url, $video_url, $genero_id, $id);
         $success = $stmt->execute();
         $stmt->close();
         return $success;

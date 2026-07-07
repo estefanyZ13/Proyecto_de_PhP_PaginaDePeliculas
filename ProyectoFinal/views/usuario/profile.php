@@ -24,7 +24,9 @@ $msg = null;
 
 // 3. Procesar formularios
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['update_profile'])) {
+    if (!verifyCsrfToken()) {
+        $msg = ['error' => 'La sesión expiró. Recargue la página e intente nuevamente.'];
+    } elseif (isset($_POST['update_profile'])) {
         // Actualizar datos del usuario
         $email = clean($_POST['email'] ?? '');
         $username = clean($_POST['username'] ?? '');
@@ -48,8 +50,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 // Actualizar contraseña si se ingresó una nueva
                 if (!empty($password)) {
-                    if (strlen($password) < 6) {
-                        $msg = ['error' => 'Los datos básicos se guardaron, pero la contraseña debe tener al menos 6 caracteres y no se modificó.'];
+                    $password_error = validateStrongPassword($password);
+                    if ($password_error) {
+                        $msg = ['error' => 'Los datos básicos se guardaron, pero la contraseña no se modificó: ' . $password_error];
                     } else {
                         User::updatePassword($user_id, $password);
                     }
@@ -105,7 +108,7 @@ require_once __DIR__ . '/../includes/navbar.php';
                 <div class="profile-card">
                     <?php
                     $avatar_num = $_SESSION['user_avatar'];
-                    $avatar_url = BASE_URL . "assets/img/avatar" . $avatar_num . ".png";
+                    $avatar_url = BASE_URL . "assets/img/avatar" . $avatar_num . ".svg";
                     ?>
                     <img src="<?php echo $avatar_url; ?>" alt="Avatar" style="width: 96px; height: 96px; border-radius:50%; border: 3px solid var(--accent); object-fit: cover; margin-bottom: 16px;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
                     <h2 style="font-size: 20px; font-weight: 700;">@<?php echo clean($user['username']); ?></h2>
@@ -119,11 +122,13 @@ require_once __DIR__ . '/../includes/navbar.php';
                     <h3 style="font-size: 14px; margin-bottom: 16px; font-weight: 700;">Mantenimiento y Cookies</h3>
                     <div style="display: flex; flex-direction: column; gap: 12px;">
                         <form action="" method="POST">
+                            <?php csrfField(); ?>
                             <button type="submit" name="clear_history" class="btn btn-secondary btn-sm" style="width: 100%; border-radius: 6px; justify-content: flex-start; color: var(--danger);">
                                 🗑️ Limpiar Historial de Visualización
                             </button>
                         </form>
                         <form action="" method="POST">
+                            <?php csrfField(); ?>
                             <button type="submit" name="clear_cookies" class="btn btn-secondary btn-sm" style="width: 100%; border-radius: 6px; justify-content: flex-start;">
                                 🍪 Restablecer Cookies y Tema
                             </button>
@@ -137,13 +142,14 @@ require_once __DIR__ . '/../includes/navbar.php';
                 <h3 style="font-size: 18px; margin-bottom: 20px; font-weight: 700;">Configuración de Cuenta</h3>
                 
                 <form action="" method="POST" id="profile-form">
+                    <?php csrfField(); ?>
                     
                     <!-- Selección de Avatar -->
                     <div class="form-group">
                         <label>Elige tu Avatar</label>
                         <div class="profile-avatar-select">
                             <?php for ($i=1; $i<=4; $i++): 
-                                $av_opt_url = BASE_URL . "assets/img/avatar" . $i . ".png";
+                                $av_opt_url = BASE_URL . "assets/img/avatar" . $i . ".svg";
                             ?>
                                 <div class="avatar-option <?php echo ($avatar_num === $i) ? 'selected' : ''; ?>" data-avatar-id="<?php echo $i; ?>">
                                     <img src="<?php echo $av_opt_url; ?>" alt="Avatar Opt" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
@@ -166,7 +172,7 @@ require_once __DIR__ . '/../includes/navbar.php';
                     
                     <div class="form-group">
                         <label for="password">Nueva Contraseña (Dejar vacío para no cambiar)</label>
-                        <input type="password" name="password" id="password" class="form-control" placeholder="••••••••">
+                        <input type="password" name="password" id="password" class="form-control" placeholder="Mínimo 12 caracteres, mayúscula, minúscula, número y símbolo">
                     </div>
                     
                     <!-- Checkboxes de géneros -->

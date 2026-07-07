@@ -7,9 +7,65 @@ require_once __DIR__ . '/../models/User.php';
 require_once __DIR__ . '/../models/Preference.php';
 
 class AuthController {
+    private static function clientIp() {
+        return $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    }
+
+    private static function ensureLoginAttemptsTable() {
+        global $conn;
+        $conn->query("
+            CREATE TABLE IF NOT EXISTS login_attempts (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                username VARCHAR(100) NOT NULL,
+                ip_address VARCHAR(45) NOT NULL,
+                attempted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                INDEX idx_login_attempts (username, ip_address, attempted_at)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+        ");
+    }
+
+    private static function isLoginBlocked($username) {
+        global $conn;
+        self::ensureLoginAttemptsTable();
+        $ip = self::clientIp();
+        $stmt = $conn->prepare("
+            SELECT COUNT(*) AS attempts
+            FROM login_attempts
+            WHERE username = ? AND ip_address = ? AND attempted_at > (NOW() - INTERVAL 15 MINUTE)
+        ");
+        $stmt->bind_param("ss", $username, $ip);
+        $stmt->execute();
+        $row = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+        return ((int)($row['attempts'] ?? 0)) >= 5;
+    }
+
+    private static function registerFailedLogin($username) {
+        global $conn;
+        self::ensureLoginAttemptsTable();
+        $ip = self::clientIp();
+        $stmt = $conn->prepare("INSERT INTO login_attempts (username, ip_address) VALUES (?, ?)");
+        $stmt->bind_param("ss", $username, $ip);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    private static function clearFailedLogins($username) {
+        global $conn;
+        self::ensureLoginAttemptsTable();
+        $ip = self::clientIp();
+        $stmt = $conn->prepare("DELETE FROM login_attempts WHERE username = ? AND ip_address = ?");
+        $stmt->bind_param("ss", $username, $ip);
+        $stmt->execute();
+        $stmt->close();
+    }
     
     public static function register() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!verifyCsrfToken()) {
+                return ['error' => 'La sesión expiró. Recargue la página e intente nuevamente.'];
+            }
+
             $username = clean($_POST['username'] ?? '');
             $email = clean($_POST['email'] ?? '');
             $password = $_POST['password'] ?? '';
@@ -26,8 +82,9 @@ class AuthController {
             if ($password !== $confirm_password) {
                 return ['error' => 'Las contraseñas no coinciden.'];
             }
-            if (strlen($password) < 6) {
-                return ['error' => 'La contraseña debe tener al menos 6 caracteres.'];
+            $password_error = validateStrongPassword($password);
+            if ($password_error) {
+                return ['error' => $password_error];
             }
 
             // Validar si el usuario ya existe
@@ -51,6 +108,7 @@ class AuthController {
                 $_SESSION['username'] = $username;
                 $_SESSION['email'] = $email;
                 $_SESSION['rol_nombre'] = 'Usuario';
+                session_regenerate_id(true);
                 
                 // Establecer cookie de tema por defecto (oscuro)
                 if (!isset($_COOKIE['theme'])) {
@@ -67,6 +125,10 @@ class AuthController {
 
     public static function login() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!verifyCsrfToken()) {
+                return ['error' => 'La sesión expiró. Recargue la página e intente nuevamente.'];
+            }
+
             $username = clean($_POST['username'] ?? '');
             $password = $_POST['password'] ?? '';
             $remember = isset($_POST['remember']);
@@ -81,6 +143,10 @@ class AuthController {
                 return ['error' => 'Por favor complete todos los campos.'];
             }
 
+            if (self::isLoginBlocked($username)) {
+                return ['error' => 'Demasiados intentos fallidos. Espere 15 minutos antes de intentar nuevamente.'];
+            }
+
             $user = User::getByUsername($username);
             
             // Si no existe, probar con correo electrónico
@@ -92,6 +158,8 @@ class AuthController {
                 // Login exitoso, limpiar intentos fallidos
                 unset($_SESSION['failed_logins']);
                 unset($_SESSION['login_block_until']);
+                self::clearFailedLogins($username);
+                session_regenerate_id(true);
 
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
@@ -118,6 +186,7 @@ class AuthController {
                     redirect('views/usuario/home.php');
                 }
             } else {
+                self::registerFailedLogin($username);
                 // Registrar intento fallido
                 $_SESSION['failed_logins'] = ($_SESSION['failed_logins'] ?? 0) + 1;
                 

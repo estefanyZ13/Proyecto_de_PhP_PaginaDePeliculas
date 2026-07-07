@@ -23,7 +23,7 @@ class SeriesController {
             }
 
             // Manejo de carga de imagen
-            $imagen_url = 'assets/img/placeholder.jpg'; // por defecto
+            $imagen_url = 'assets/img/placeholder.svg'; // por defecto
             
             if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
                 $file_tmp = $_FILES['imagen']['tmp_name'];

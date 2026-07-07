@@ -37,6 +37,7 @@ require_once __DIR__ . '/../includes/navbar.php';
         <?php endif; ?>
         
         <form action="" method="POST" id="register-form">
+            <?php csrfField(); ?>
             <div class="form-group">
                 <label for="username">Nombre de Usuario</label>
                 <input type="text" name="username" id="username" class="form-control" placeholder="Ej: miguel_utp" required value="<?php echo isset($_POST['username']) ? clean($_POST['username']) : ''; ?>">
@@ -49,7 +50,7 @@ require_once __DIR__ . '/../includes/navbar.php';
             
             <div class="form-group" style="margin-bottom: 12px;">
                 <label for="password">Contraseña</label>
-                <input type="password" name="password" id="password" class="form-control" placeholder="Mínimo 6 caracteres" required>
+                <input type="password" name="password" id="password" class="form-control" placeholder="Mínimo 12 caracteres, mayúscula, minúscula, número y símbolo" required>
             </div>
             
             <div class="form-group" style="margin-bottom: 24px;">
@@ -89,9 +90,11 @@ document.getElementById('register-form').addEventListener('submit', function(e) 
     const password = document.getElementById('password').value;
     const confirm = document.getElementById('confirm_password').value;
     
-    if (password.length < 6) {
+    const strongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{12,}$/;
+
+    if (!strongPassword.test(password)) {
         e.preventDefault();
-        alert('La contraseña debe tener al menos 6 caracteres.');
+        alert('La contraseña debe tener mínimo 12 caracteres e incluir mayúscula, minúscula, número y símbolo.');
         return;
     }
     

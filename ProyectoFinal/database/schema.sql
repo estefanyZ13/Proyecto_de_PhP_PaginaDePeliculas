@@ -116,3 +116,12 @@ CREATE TABLE IF NOT EXISTS `visitas` (
     FOREIGN KEY (`usuario_id`) REFERENCES `usuarios`(`id`) ON DELETE SET NULL,
     FOREIGN KEY (`genero_id`) REFERENCES `generos`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 11. Failed login attempts table (for brute-force protection)
+CREATE TABLE IF NOT EXISTS `login_attempts` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `username` VARCHAR(100) NOT NULL,
+    `ip_address` VARCHAR(45) NOT NULL,
+    `attempted_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX `idx_login_attempts` (`username`, `ip_address`, `attempted_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

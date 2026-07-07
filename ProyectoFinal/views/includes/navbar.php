@@ -34,7 +34,7 @@ $theme_text = getCookieVal('theme', 'dark') === 'light' ? 'Tema Oscuro' : 'Tema 
                 <?php
                 // Obtener avatar de la sesión o usar por defecto
                 $avatar_num = isset($_SESSION['user_avatar']) ? $_SESSION['user_avatar'] : 1;
-                $avatar_url = BASE_URL . "assets/img/avatar" . $avatar_num . ".png";
+                $avatar_url = BASE_URL . "assets/img/avatar" . $avatar_num . ".svg";
                 ?>
                 <div class="profile-avatar-btn" id="profile-avatar-btn">
                     <img src="<?php echo $avatar_url; ?>" alt="Avatar" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">

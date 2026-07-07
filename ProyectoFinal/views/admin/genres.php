@@ -9,26 +9,28 @@ require_once __DIR__ . '/../../models/Genre.php';
 $error = null;
 $msg = clean($_GET['msg'] ?? '');
 
-if (isset($_GET['delete']) && (int)$_GET['delete'] > 0) {
-    Genre::delete((int)$_GET['delete']);
-    redirect('views/admin/genres.php?msg=deleted');
-}
-
 $edit_genre = null;
 $edit_id = isset($_GET['edit']) ? (int)$_GET['edit'] : 0;
 if ($edit_id > 0) $edit_genre = Genre::getById($edit_id);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nombre = clean($_POST['nombre'] ?? '');
-    if (empty($nombre)) {
-        $error = 'El nombre del género es obligatorio.';
+    if (!verifyCsrfToken()) {
+        $error = 'La sesión expiró. Recargue la página e intente nuevamente.';
+    } elseif (isset($_POST['delete_genre'])) {
+        Genre::delete((int)($_POST['genre_id'] ?? 0));
+        redirect('views/admin/genres.php?msg=deleted');
     } else {
+        $nombre = clean($_POST['nombre'] ?? '');
+        if (empty($nombre)) {
+        $error = 'El nombre del género es obligatorio.';
+        } else {
         if (isset($_POST['edit_genre'])) {
             Genre::update($edit_id, $nombre);
             redirect('views/admin/genres.php?msg=updated');
         } else {
             Genre::create($nombre);
             redirect('views/admin/genres.php?msg=created');
+        }
         }
     }
 }
@@ -49,6 +51,7 @@ require_once __DIR__ . '/../includes/navbar.php';
                 <li><a href="series.php">📺 Series (CRUD)</a></li>
                 <li class="active"><a href="genres.php">🏷️ Géneros</a></li>
                 <li><a href="users.php">👥 Usuarios</a></li>
+                <li><a href="tmdb_import.php">⬇ Importar TMDB</a></li>
                 <div class="dropdown-divider" style="margin: 10px 24px;"></div>
                 <li><a href="../usuario/home.php">🏠 Volver al Sitio</a></li>
             </ul>
@@ -68,6 +71,7 @@ require_once __DIR__ . '/../includes/navbar.php';
                 <div class="admin-chart-box" style="height: fit-content;">
                     <h3 class="admin-chart-title"><?php echo $edit_genre ? 'Editar Género' : 'Nuevo Género'; ?></h3>
                     <form action="" method="POST">
+                        <?php csrfField(); ?>
                         <div class="form-group">
                             <label>Nombre del Género *</label>
                             <input type="text" name="nombre" class="form-control" value="<?php echo $edit_genre ? clean($edit_genre['nombre']) : ''; ?>" required placeholder="Ej: Animación">
@@ -91,7 +95,11 @@ require_once __DIR__ . '/../includes/navbar.php';
                                         <td><strong><?php echo clean($g['nombre']); ?></strong></td>
                                         <td><div class="action-buttons">
                                             <a href="genres.php?edit=<?php echo $g['id']; ?>" class="btn btn-edit btn-sm">✏️ Editar</a>
-                                            <a href="genres.php?delete=<?php echo $g['id']; ?>" class="btn btn-delete btn-sm" onclick="return confirm('¿Eliminar género?');">🗑️ Eliminar</a>
+                                            <form action="" method="POST" style="display:inline;" onsubmit="return confirm('¿Eliminar género?');">
+                                                <?php csrfField(); ?>
+                                                <input type="hidden" name="genre_id" value="<?php echo $g['id']; ?>">
+                                                <button type="submit" name="delete_genre" class="btn btn-delete btn-sm">🗑️ Eliminar</button>
+                                            </form>
                                         </div></td>
                                     </tr>
                                 <?php endforeach; ?>

@@ -16,11 +16,12 @@ $theme_class = ($theme === 'light') ? 'theme-light' : '';
     <title><?php echo isset($page_title) ? clean($page_title) . " | Proyecto Final" : "Proyecto Final - Plataforma de Streaming"; ?></title>
     
     <!-- Hojas de estilo -->
-    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/style.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/js/css/style.css">
     
     <!-- Inyectar BASE_URL para JS -->
     <script>
         window.BASE_URL = "<?php echo BASE_URL; ?>";
+        window.CSRF_TOKEN = "<?php echo csrfToken(); ?>";
     </script>
 </head>
 <body class="<?php echo $theme_class; ?>">

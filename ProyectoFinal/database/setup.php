@@ -93,17 +93,17 @@ echo "<p>✓ Preferencias iniciales guardadas.</p>";
 // Películas (id, titulo, descripcion, duracion, año, imagen_url, video_url, genero_id, clicks)
 // Nota: Las imágenes apuntarán a marcadores en assets/img/ o paths relativos. Usamos URLs ilustrativas.
 $peliculas = [
-    [1, 'Avengers: Endgame', 'Los Vengadores se reúnen una vez más para intentar revertir las acciones de Thanos y restaurar el orden en el universo.', 181, 2019, 'assets/img/endgame.jpg', 'https://www.youtube.com/embed/TcMBFSGVi1c', 1, 150],
-    [2, 'Free Guy', 'Un cajero de banco descubre que es un personaje secundario en un videojuego de mundo abierto y decide convertirse en el héroe de su propia historia.', 115, 2021, 'assets/img/freeguy.jpg', 'https://www.youtube.com/embed/X2m-08cRItM', 3, 90],
-    [3, 'Un Lugar en Silencio', 'Una familia lucha por sobrevivir en un mundo postapocalíptico habitado por monstruos ciegos con un oído ultra sensible.', 90, 2018, 'assets/img/quietplace.jpg', 'https://www.youtube.com/embed/p9wE8dyzEJE', 2, 70],
-    [4, 'El Conjuro', 'Los investigadores paranormales Ed y Lorraine Warren acuden al llamado de una familia aterrorizada por una presencia oscura en su granja.', 112, 2013, 'assets/img/conjuring.jpg', 'https://www.youtube.com/embed/k10ETZ41q5o', 2, 60],
-    [5, 'Intensa-Mente 2', 'Riley entra a la adolescencia y su cuartel general sufre una repentina demolición para hacer espacio a algo totalmente inesperado: ¡nuevas emociones!', 96, 2024, 'assets/img/insideout2.jpg', 'https://www.youtube.com/embed/LEjhY15iCx0', 7, 300],
-    [6, 'Coco', 'Miguel es un niño que sueña con ser músico y, por accidente, viaja a la colorida Tierra de los Muertos para descubrir el misterio de su familia.', 105, 2017, 'assets/img/coco.jpg', 'https://www.youtube.com/embed/awzWdtCezDo', 7, 180],
-    [7, 'La La Land', 'Un pianista de jazz y una aspirante a actriz se enamoran en Los Ángeles mientras intentan conciliar sus aspiraciones y su carrera.', 128, 2016, 'assets/img/lalaland.jpg', 'https://www.youtube.com/embed/0pdqf4P9MB8', 4, 95],
-    [8, 'Avatar: El Camino del Agua', 'Jake Sully y Neytiri forman una familia y hacen todo lo posible por permanecer juntos, explorando las regiones de Pandora.', 192, 2022, 'assets/img/avatar2.jpg', 'https://www.youtube.com/embed/a8Gx8mBstG8', 5, 210],
-    [9, 'Interstellar', 'Un grupo de científicos y exploradores espaciales viaja a través de un agujero de gusano para encontrar un nuevo hogar para la humanidad.', 169, 2014, 'assets/img/interstellar.jpg', 'https://www.youtube.com/embed/zSWdZAIB3nY', 5, 140],
-    [10, 'El Rey León (Live Action)', 'Tras la muerte de su padre, el pequeño león Simba huye de su reino para descubrir el verdadero significado de la responsabilidad y el valor.', 118, 2019, 'assets/img/lionking.jpg', 'https://www.youtube.com/embed/7TavVZMewpY', 6, 120],
-    [11, 'Limitless con Chris Hemsworth', 'Chris Hemsworth explora formas de combatir el envejecimiento y descubrir el verdadero potencial del cuerpo humano.', 60, 2022, 'assets/img/limitless.jpg', 'https://www.youtube.com/embed/i0COx_K7oQk', 8, 45]
+    [1, 'Avengers: Endgame', 'Los Vengadores se reúnen una vez más para intentar revertir las acciones de Thanos y restaurar el orden en el universo.', 181, 2019, 'assets/img/endgame.svg', 'https://www.youtube.com/embed/TcMBFSGVi1c', 1, 150],
+    [2, 'Free Guy', 'Un cajero de banco descubre que es un personaje secundario en un videojuego de mundo abierto y decide convertirse en el héroe de su propia historia.', 115, 2021, 'assets/img/freeguy.svg', 'https://www.youtube.com/embed/X2m-08cRItM', 3, 90],
+    [3, 'Un Lugar en Silencio', 'Una familia lucha por sobrevivir en un mundo postapocalíptico habitado por monstruos ciegos con un oído ultra sensible.', 90, 2018, 'assets/img/quietplace.svg', 'https://www.youtube.com/embed/p9wE8dyzEJE', 2, 70],
+    [4, 'El Conjuro', 'Los investigadores paranormales Ed y Lorraine Warren acuden al llamado de una familia aterrorizada por una presencia oscura en su granja.', 112, 2013, 'assets/img/conjuring.svg', 'https://www.youtube.com/embed/k10ETZ41q5o', 2, 60],
+    [5, 'Intensa-Mente 2', 'Riley entra a la adolescencia y su cuartel general sufre una repentina demolición para hacer espacio a algo totalmente inesperado: ¡nuevas emociones!', 96, 2024, 'assets/img/insideout2.svg', 'https://www.youtube.com/embed/LEjhY15iCx0', 7, 300],
+    [6, 'Coco', 'Miguel es un niño que sueña con ser músico y, por accidente, viaja a la colorida Tierra de los Muertos para descubrir el misterio de su familia.', 105, 2017, 'assets/img/coco.svg', 'https://www.youtube.com/embed/awzWdtCezDo', 7, 180],
+    [7, 'La La Land', 'Un pianista de jazz y una aspirante a actriz se enamoran en Los Ángeles mientras intentan conciliar sus aspiraciones y su carrera.', 128, 2016, 'assets/img/lalaland.svg', 'https://www.youtube.com/embed/0pdqf4P9MB8', 4, 95],
+    [8, 'Avatar: El Camino del Agua', 'Jake Sully y Neytiri forman una familia y hacen todo lo posible por permanecer juntos, explorando las regiones de Pandora.', 192, 2022, 'assets/img/avatar2poster.svg', 'https://www.youtube.com/embed/a8Gx8mBstG8', 5, 210],
+    [9, 'Interstellar', 'Un grupo de científicos y exploradores espaciales viaja a través de un agujero de gusano para encontrar un nuevo hogar para la humanidad.', 169, 2014, 'assets/img/interstellar.svg', 'https://www.youtube.com/embed/zSWdZAIB3nY', 5, 140],
+    [10, 'El Rey León (Live Action)', 'Tras la muerte de su padre, el pequeño león Simba huye de su reino para descubrir el verdadero significado de la responsabilidad y el valor.', 118, 2019, 'assets/img/lionking.svg', 'https://www.youtube.com/embed/7TavVZMewpY', 6, 120],
+    [11, 'Limitless con Chris Hemsworth', 'Chris Hemsworth explora formas de combatir el envejecimiento y descubrir el verdadero potencial del cuerpo humano.', 60, 2022, 'assets/img/limitless.svg', 'https://www.youtube.com/embed/i0COx_K7oQk', 8, 45]
 ];
 
 foreach ($peliculas as $p) {
@@ -116,14 +116,14 @@ echo "<p>✓ Películas registradas.</p>";
 
 // Series (id, titulo, descripcion, temporadas, episodios, año, imagen_url, video_url, genero_id, clicks)
 $series = [
-    [1, 'The Mandalorian', 'Un cazarrecompensas solitario viaja por los confines de la galaxia, lejos de la autoridad de la Nueva República.', 3, 24, 2019, 'assets/img/mandalorian.jpg', 'https://www.youtube.com/embed/aOC8E8z_ifw', 1, 240],
-    [2, 'Loki', 'El voluble villano Loki retoma su papel como el Dios de las Travesuras en una nueva serie que transcurre tras los acontecimientos de Avengers: Endgame.', 2, 12, 2021, 'assets/img/loki.jpg', 'https://www.youtube.com/embed/nW948Va-l10', 1, 190],
-    [3, 'WandaVision', 'Combina el estilo de sitcoms clásicas con el Universo Cinematográfico de Marvel para contar la historia de Wanda Maximoff y Vision.', 1, 9, 2021, 'assets/img/wandavision.jpg', 'https://www.youtube.com/embed/sj9J2ecsSpo', 5, 110],
-    [4, 'Shōgun', 'En el Japón del año 1600, el señor feudal Lord Yoshii Toranaga lucha por su vida mientras sus enemigos en el Consejo de Regentes se alían.', 1, 10, 2024, 'assets/img/shogun.jpg', 'https://www.youtube.com/embed/yAN5sR24nS0', 6, 175],
-    [5, 'X-Men \'97', 'Banda de mutantes que usan sus extraños dones para proteger a un mundo que los teme y los odia en los años 90.', 1, 10, 2024, 'assets/img/xmen97.jpg', 'https://www.youtube.com/embed/pv3PBja97K0', 7, 230],
-    [6, 'Bridgerton', 'Ocho hermanos de la poderosa familia Bridgerton intentan encontrar el amor y la felicidad en la alta sociedad londinense.', 3, 24, 2020, 'assets/img/bridgerton.jpg', 'https://www.youtube.com/embed/gpv7ayf_tyE', 4, 85],
-    [7, 'Welcome to Earth', 'Will Smith viaja a los lugares más extremos, activos e inexplorados del planeta en una aventura única.', 1, 6, 2021, 'assets/img/welcomeearth.jpg', 'https://www.youtube.com/embed/K955A434sZ4', 8, 50],
-    [8, 'Monsters at Work', 'Tylor Tuskmon se gradúa como el mejor de su clase en Monsters University y llega a Monsters, Inc. justo cuando el susto se cambia por la risa.', 2, 20, 2021, 'assets/img/monsterswork.jpg', 'https://www.youtube.com/embed/d8J8nB47K_4', 7, 95]
+    [1, 'The Mandalorian', 'Un cazarrecompensas solitario viaja por los confines de la galaxia, lejos de la autoridad de la Nueva República.', 3, 24, 2019, 'assets/img/mandalorian.svg', 'https://www.youtube.com/embed/aOC8E8z_ifw', 1, 240],
+    [2, 'Loki', 'El voluble villano Loki retoma su papel como el Dios de las Travesuras en una nueva serie que transcurre tras los acontecimientos de Avengers: Endgame.', 2, 12, 2021, 'assets/img/loki.svg', 'https://www.youtube.com/embed/nW948Va-l10', 1, 190],
+    [3, 'WandaVision', 'Combina el estilo de sitcoms clásicas con el Universo Cinematográfico de Marvel para contar la historia de Wanda Maximoff y Vision.', 1, 9, 2021, 'assets/img/wandavision.svg', 'https://www.youtube.com/embed/sj9J2ecsSpo', 5, 110],
+    [4, 'Shōgun', 'En el Japón del año 1600, el señor feudal Lord Yoshii Toranaga lucha por su vida mientras sus enemigos en el Consejo de Regentes se alían.', 1, 10, 2024, 'assets/img/shogun.svg', 'https://www.youtube.com/embed/yAN5sR24nS0', 6, 175],
+    [5, 'X-Men \'97', 'Banda de mutantes que usan sus extraños dones para proteger a un mundo que los teme y los odia en los años 90.', 1, 10, 2024, 'assets/img/xmen97.svg', 'https://www.youtube.com/embed/pv3PBja97K0', 7, 230],
+    [6, 'Bridgerton', 'Ocho hermanos de la poderosa familia Bridgerton intentan encontrar el amor y la felicidad en la alta sociedad londinense.', 3, 24, 2020, 'assets/img/bridgerton.svg', 'https://www.youtube.com/embed/gpv7ayf_tyE', 4, 85],
+    [7, 'Welcome to Earth', 'Will Smith viaja a los lugares más extremos, activos e inexplorados del planeta en una aventura única.', 1, 6, 2021, 'assets/img/welcomeearth.svg', 'https://www.youtube.com/embed/K955A434sZ4', 8, 50],
+    [8, 'Monsters at Work', 'Tylor Tuskmon se gradúa como el mejor de su clase en Monsters University y llega a Monsters, Inc. justo cuando el susto se cambia por la risa.', 2, 20, 2021, 'assets/img/monsterswork.svg', 'https://www.youtube.com/embed/d8J8nB47K_4', 7, 95]
 ];
 
 foreach ($series as $s) {
@@ -164,7 +164,12 @@ $visitas = [
     [4, 2], [4, 2], [4, 2], [4, 8]  // Terror (3), Doc (1)
 ];
 foreach ($visitas as $v) {
-    $conn->query("INSERT INTO visitas (usuario_id, genero_id) VALUES ({$v[0]}, {$v[1]})");
+    $usuario_id = (int)$v[0];
+    $genero_id = (int)$v[1];
+    $exists = $conn->query("SELECT id FROM visitas WHERE usuario_id = $usuario_id AND genero_id = $genero_id LIMIT 1");
+    if ($exists && $exists->num_rows === 0) {
+        $conn->query("INSERT INTO visitas (usuario_id, genero_id) VALUES ($usuario_id, $genero_id)");
+    }
 }
 echo "<p>✓ Visitas de estadísticas registradas.</p>";
 
@@ -181,11 +186,12 @@ if (!file_exists($img_dir)) {
 
 // Crear archivos de imagen ficticios (vacíos o con un pixel) para que no den 404
 $mock_images = [
-    'endgame.jpg', 'freeguy.jpg', 'quietplace.jpg', 'conjuring.jpg', 
-    'insideout2.jpg', 'coco.jpg', 'lalaland.jpg', 'avatar2.jpg', 
-    'interstellar.jpg', 'lionking.jpg', 'limitless.jpg',
-    'mandalorian.jpg', 'loki.jpg', 'wandavision.jpg', 'shogun.jpg', 
-    'xmen97.jpg', 'bridgerton.jpg', 'welcomeearth.jpg', 'monsterswork.jpg'
+    'endgame.svg', 'freeguy.svg', 'quietplace.svg', 'conjuring.svg',
+    'insideout2.svg', 'coco.svg', 'lalaland.svg', 'avatar2poster.svg',
+    'interstellar.svg', 'lionking.svg', 'limitless.svg',
+    'mandalorian.svg', 'loki.svg', 'wandavision.svg', 'shogun.svg',
+    'xmen97.svg', 'bridgerton.svg', 'welcomeearth.svg', 'monsterswork.svg',
+    'placeholder.svg'
 ];
 foreach ($mock_images as $img) {
     $img_path = $img_dir . '/' . $img;

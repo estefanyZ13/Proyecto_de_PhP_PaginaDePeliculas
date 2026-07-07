@@ -76,15 +76,19 @@ function initLiveSearch() {
                 if (results.length === 0) {
                     dropdown.innerHTML = '<div style="padding: 15px; text-align: center; font-size: 13px; color: var(--text-muted);">Sin resultados</div>';
                 } else {
-                    dropdown.innerHTML = results.map(item => `
+                    dropdown.innerHTML = results.map(item => {
+                        const imgUrl = /^https?:\/\//i.test(item.imagen_url)
+                            ? item.imagen_url
+                            : `${window.BASE_URL}${item.imagen_url}`;
+                        return `
                         <a href="${window.BASE_URL}views/usuario/detail.php?id=${item.id}&tipo=${item.tipo}" class="search-item">
-                            <img src="${window.BASE_URL}${item.imagen_url}" alt="${item.titulo}" onerror="this.src='${window.BASE_URL}assets/img/placeholder.jpg'">
+                            <img src="${imgUrl}" alt="${item.titulo}" onerror="this.src='${window.BASE_URL}assets/img/placeholder.svg'">
                             <div class="search-item-info">
                                 <h4>${item.titulo}</h4>
                                 <span>${item.tipo === 'movie' ? 'Película' : 'Serie'} • ${item.año}</span>
                             </div>
                         </a>
-                    `).join('');
+                    `}).join('');
                 }
                 dropdown.classList.add('active');
             } catch (err) {
@@ -182,7 +186,8 @@ function initVideoPlayer() {
                     await fetch(`${window.BASE_URL}services/json/api.php?action=update_history`, {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'X-CSRF-Token': window.CSRF_TOKEN || ''
                         },
                         body: JSON.stringify(postData)
                     });
@@ -226,7 +231,8 @@ async function toggleFavorite(btn, mediaId, tipo) {
         const response = await fetch(`${window.BASE_URL}services/json/api.php?action=toggle_favorite`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': window.CSRF_TOKEN || ''
             },
             body: JSON.stringify(postData)
         });

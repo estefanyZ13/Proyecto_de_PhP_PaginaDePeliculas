@@ -34,6 +34,7 @@ require_once __DIR__ . '/../includes/navbar.php';
                 <li><a href="series.php">📺 Series (CRUD)</a></li>
                 <li><a href="genres.php">🏷️ Géneros</a></li>
                 <li><a href="users.php">👥 Usuarios</a></li>
+                <li><a href="tmdb_import.php">⬇ Importar TMDB</a></li>
                 <div class="dropdown-divider" style="margin: 10px 24px;"></div>
                 <li><a href="../usuario/home.php">🏠 Volver al Sitio</a></li>
             </ul>
